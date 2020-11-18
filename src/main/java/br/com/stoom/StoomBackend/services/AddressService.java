@@ -21,6 +21,10 @@ import br.com.stoom.StoomBackend.model.AddressTO;
 import br.com.stoom.StoomBackend.model.GeoInformation;
 import br.com.stoom.StoomBackend.model.GeoResult;
 
+/**
+ * <p>Address Service</p>
+ * @author guilherme_pinheiro
+ */
 @Service
 public class AddressService {
 	
@@ -35,6 +39,13 @@ public class AddressService {
 		logger.info("Database connection established...");
 	}
 	
+	/**
+	 * <p>Create Address Service Method</p>
+	 * @param address
+	 * @return Void
+	 * @throws ResponseStatusException
+	 * @throws Exception
+	 */
 	public Void createAddress(AddressTO address) throws ResponseStatusException, Exception {
 		logger.info("Starting flow for address insertion...");
 		address = validateAddress(address);
@@ -52,6 +63,12 @@ public class AddressService {
 		return null;
 	}
 	
+	/**
+	 * <p>Update Address Service Method</p>
+	 * @param address
+	 * @return Void
+	 * @throws DataAccessException
+	 */
 	public Void updateAddress(AddressTO address) throws DataAccessException {
 		logger.info("Starting flow for address update...");
 		StringBuilder sql = new StringBuilder("UPDATE ADDRESS SET");
@@ -73,6 +90,12 @@ public class AddressService {
 		return null;
 	}
 	
+	/**
+	 * <p>Get Address By ID Service Method</p>
+	 * @param id
+	 * @return AddressTO
+	 * @throws DataAccessException
+	 */
 	public AddressTO getAddress(String id) throws DataAccessException {
 		logger.info("Starting flow for obtaining address by id...");
 		String sql = "SELECT * FROM ADDRESS WHERE ADDRESS.id = " + id + "";
@@ -81,6 +104,11 @@ public class AddressService {
 		return (AddressTO) address;
 	}
 	
+	/**
+	 * <p>List Address Service Method</p>
+	 * @return List<AddressTO>
+	 * @throws DataAccessException
+	 */
 	public List<AddressTO> listAddress() throws DataAccessException {
 		logger.info("Starting flow for obtaining the address list...");
 		List<AddressTO> ret = jdbc.query("SELECT * FROM ADDRESS", new AddressListRowMapper());
@@ -88,6 +116,12 @@ public class AddressService {
 		return ret;
 	}
 	
+	/**
+	 * <p>Delete Address By ID Service Method</p>
+	 * @param id
+	 * @return Void
+	 * @throws DataAccessException
+	 */
 	public Void deleteAddress(String id) throws DataAccessException {
 		logger.info("Starting flow for address removal...");
 		jdbc.update("DELETE FROM ADDRESS WHERE ADDRESS.id = " + id + "");
@@ -95,6 +129,13 @@ public class AddressService {
 		return null;
 	}
 	
+	/**
+	 * <p>Validate Address Service Method</p>
+	 * @param address
+	 * @return AddressTO
+	 * @throws ResponseStatusException
+	 * @throws Exception
+	 */
 	private AddressTO validateAddress(AddressTO address) throws ResponseStatusException, Exception {
 		validateAddressFields(address);
 		if (address.getLatitude() == null || address.getLongitude() == null) {
@@ -115,6 +156,13 @@ public class AddressService {
 		return address;
 	}
 	
+	/**
+	 * <p>Get Geolocation By Google API Service Method</p>
+	 * @param URL
+	 * @return GeoResult
+	 * @throws ResponseStatusException
+	 * @throws Exception
+	 */
 	public GeoResult getGeoLocation(String URL) throws ResponseStatusException, Exception {
 		String geoResponse = rest.getForObject(URL, String.class);
 		GeoInformation geoInfo = new ObjectMapper().readValue(geoResponse, GeoInformation.class);
@@ -127,6 +175,11 @@ public class AddressService {
 		}
 	}
 	
+	/**
+	 * <p>Validate Address Fields Service Method</p>
+	 * @param address
+	 * @throws ResponseStatusException
+	 */
 	private void validateAddressFields(AddressTO address) throws ResponseStatusException {
 		if (address.getStreetName() == null || address.getNumber() == null || address.getNeighbourhood() == null ||
 			address.getCity() == null || address.getState() == null || address.getCountry() == null || address.getZipCode() == null)

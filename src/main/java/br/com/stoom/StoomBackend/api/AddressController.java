@@ -22,6 +22,10 @@ import br.com.stoom.StoomBackend.exceptions.AddressError;
 import br.com.stoom.StoomBackend.model.AddressTO;
 import br.com.stoom.StoomBackend.services.AddressService;
 
+/**
+ * <p>Address Controller</p>
+ * @author guilherme_pinheiro
+ */
 @RestController
 @RequestMapping(value="/address")
 public class AddressController {
@@ -29,26 +33,51 @@ public class AddressController {
 	@Autowired
 	private AddressService addressService;
 	
+	/**
+	 * <p>Create Address Endpoint</>
+	 * @param address
+	 * @return ResponseEntity<Void>
+	 * @throws Exception
+	 */
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> createAddress(@RequestBody @Valid AddressTO address) throws Exception {
 		return new ResponseEntity<>(addressService.createAddress(address), HttpStatus.CREATED);
 	}
 	
+	/**
+	 * <p>Update Address Endpoint</p>
+	 * @param address
+	 * @return ResponseEntity<Void>
+	 */
 	@RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> updateAddress(@RequestBody @Valid AddressTO address) {
 		return new ResponseEntity<>(addressService.updateAddress(address), HttpStatus.NO_CONTENT);
 	}
 	
+	/**
+	 * <p>Get Address by ID Endpoint</p>
+	 * @param id
+	 * @return ResponseEntity<AddressTO>
+	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/{id}", produces = "application/json")
 	public ResponseEntity<AddressTO> getAddress(@PathVariable("id") String id) {
 		return new ResponseEntity<>(addressService.getAddress(id), HttpStatus.OK);
 	}
 	
+	/**
+	 * <p>List Address Endpoint</p>
+	 * @return ResponseEntity<List<AddressTO>>
+	 */
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<AddressTO>> listAddress() {
 		return new ResponseEntity<>(addressService.listAddress(), HttpStatus.OK);
 	}
 	
+	/**
+	 * <p>Delete Address by ID Endpoint</p>
+	 * @param id
+	 * @return ResponseEntity<Void>
+	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
 	public ResponseEntity<Void> deleteAddress(@PathVariable("id") String id) {
 		return new ResponseEntity<>(addressService.deleteAddress(id), HttpStatus.NO_CONTENT);
